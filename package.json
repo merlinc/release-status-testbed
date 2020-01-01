@@ -1,0 +1,19 @@
+{
+  "name": "release-status-testbed",
+  "version": "1.0.0",
+  "description": "Testbed repository for working with release-status",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merlinc/release-status-testbed.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/merlinc/release-status-testbed/issues"
+  },
+  "homepage": "https://github.com/merlinc/release-status-testbed#readme"
+}
