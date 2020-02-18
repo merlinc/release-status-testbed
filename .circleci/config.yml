@@ -8,24 +8,65 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:12.4
-    working_directory: ~/repo
+    working_directory: ~/working
 
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
       - run: npm install
-
-      - save_cache:
+      # Persist the specified paths (workspace/echo-output) into the workspace for use in downstream job. 
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: ~/working
+          # Must be relative path from root
           paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+            - package.json
+  deploy_ci:
+    docker:
+      - image: circleci/node:12.4
+    steps:
+      - run: echo "Deployed CI"
+  deploy_staging:
+    docker:
+      - image: circleci/node:12.4
+    steps:
+      - run: echo "Deployed Staging"
+  deploy_prod:
+    docker:
+      - image: circleci/node:12.4
+    steps:
+      - run: echo "Deployed! Prod"
 
-      # run tests!
-#      - run: npm test
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: 
+                - master
+  cd:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: 
+                - master
+      - ci:
+          requires:
+            - build
+      - hold_staging:
+          type: approval
+          requires:
+            - ci
+      - deploy_staging:
+          requires:
+            - hold_staging
+      - hold_prod:
+          type: approval
+          requires:
+            - deploy_staging
+      - deploy_prod:
+          requires:
+            - hold_prod
