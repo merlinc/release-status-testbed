@@ -21,11 +21,11 @@ jobs:
           # Must be relative path from root
           paths:
             - package.json
-  deploy_ci:
+  deploy_integration:
     docker:
       - image: circleci/node:12.4
     steps:
-      - run: echo "Deployed CI"
+      - run: echo "Deployed Integration"
   deploy_staging:
     docker:
       - image: circleci/node:12.4
@@ -53,13 +53,13 @@ workflows:
             branches:
               only: 
                 - master
-      - ci:
+      - deploy_integration:
           requires:
             - build
       - hold_staging:
           type: approval
           requires:
-            - ci
+            - deploy_integration
       - deploy_staging:
           requires:
             - hold_staging
