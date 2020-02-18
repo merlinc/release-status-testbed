@@ -24,14 +24,17 @@ jobs:
   deploy_ci:
     docker:
       - image: circleci/node:12.4
+    steps:
       - run: echo "Deployed CI"
   deploy_staging:
     docker:
       - image: circleci/node:12.4
+    steps:
       - run: echo "Deployed Staging"
   deploy_prod:
     docker:
       - image: circleci/node:12.4
+    steps:
       - run: echo "Deployed! Prod"
 
 workflows:
