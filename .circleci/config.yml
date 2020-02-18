@@ -59,7 +59,7 @@ workflows:
       - hold_staging:
           type: approval
           requires:
-            - ci
+            - deploy_integration
       - deploy_staging:
           requires:
             - hold_staging
