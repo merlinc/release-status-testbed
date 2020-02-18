@@ -53,7 +53,7 @@ workflows:
             branches:
               only: 
                 - master
-      - ci:
+      - deploy_ci:
           requires:
             - build
       - hold_staging:
